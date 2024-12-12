@@ -3,12 +3,12 @@ import { TbUserSquareRounded } from "react-icons/tb";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import BlogImage from "../component/BlogImage";
-
+import blogData from "../json/blogsData.json"
 
 
 
 const BlogPage = () => {
-    const [blogs, setBlogs] = useState([]);
+    const [blogs, setBlogs] = useState(blogData);
     const [loading, setLoading] = useState(true); // Added loading state
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -17,18 +17,20 @@ const BlogPage = () => {
     const [selectedBlog, setSelectedBlog] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    useEffect(() => {
-        fetch('blogsData.json')
-            .then(res => res.json())
-            .then(data => {
-                setBlogs(data);
-                setLoading(false); // Set loading to false after data is fetched
-            })
-            .catch(error => {
-                console.error('Error fetching blogs:', error);
-                setLoading(false); // Ensure loading is false even on error
-            });
-    }, []);
+    // useEffect(() => {
+    //     fetch('blogsData.json')
+    //       .then(res => res.json())
+    //       .then(data => {
+    //         console.log(data);  // Check if the data is correctly fetched
+    //         setBlogs(data);
+    //         setLoading(false); // Set loading to false after data is fetched
+    //       })
+    //       .catch(error => {
+    //         console.error('Error fetching blogs:', error);
+    //         setLoading(false); // Ensure loading is false even on error
+    //       });
+    //   }, []);
+      
 
     const allCategories = [...new Set(blogs.map(blog => blog.category))];
 

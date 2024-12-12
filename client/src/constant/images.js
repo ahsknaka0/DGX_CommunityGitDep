@@ -57,6 +57,9 @@ import us6 from '../assets/us6.jpg'
 import us7 from '../assets/us7.jpg'
 import us8 from '../assets/us8.jpg'
 import us9 from '../assets/us9.jpg'
+import bg1 from '../assets/bg1.jpg'
+import bg2 from '../assets/bg2.jpg'
+import bg3 from '../assets/bg3.jpg'
 
 
 
@@ -118,5 +121,8 @@ export default {
     us7,
     us8,
     us9,
+    bg1,
+    bg2,
+    bg3,
 
 }
