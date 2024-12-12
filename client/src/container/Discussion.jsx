@@ -29,6 +29,8 @@ const Discussion = () => {
 
     loadEvents();
   }, []);
+
+  
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -236,6 +238,7 @@ const Discussion = () => {
     setModalIsOpen(false);
     setIsFormOpen(false);
   };
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleTagInputChange = (e) => setTagInput(e.target.value);
 
@@ -457,14 +460,27 @@ const Discussion = () => {
               className="w-full xs:w-full sm:w-64 bg-lime-500 rounded-lg mb-1 sm:mt-4"
             />
           ) : (
-            <button
-              type="button"
-              className="py-2 xs:w-full px-3 gap-x-2 text-sm font-bold rounded-lg bg-DGXgreen text-DGXwhite shadow-sm hover:bg-DGXblue hover:border-DGXgreen border border-DGXblue disabled:opacity-50 disabled:pointer-events-none"
-              onClick={() => { setIsFormOpen(true) }}
-            >
-              Start a New Topic +
-            </button>
+            isLoggedIn ? (
+              <button
+                type="button"
+                className="py-2 xs:w-full px-3 gap-x-2 text-sm font-bold rounded-lg bg-DGXgreen text-DGXwhite shadow-sm hover:bg-DGXblue hover:border-DGXgreen border border-DGXblue disabled:opacity-50 disabled:pointer-events-none"
+                onClick={() => { setIsFormOpen(true) }}
+              >
+                Start a New Topic +
+              </button>
+            ) : (
+
+              <a href="/SignInn" target="_blank" className="font-semibold text-DGXwhite bd">
+                <button
+                  type="button"
+                  className="py-2 xs:w-full px-3 gap-x-2 text-sm font-bold rounded-lg bg-DGXgreen text-DGXwhite shadow-sm hover:bg-DGXblue hover:border-DGXgreen border border-DGXblue disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  Start a New Topic +
+                </button>
+              </a>
+            )
           )}
+
 
         </nav>
       </header>

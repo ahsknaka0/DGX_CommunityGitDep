@@ -8,7 +8,8 @@ import ApiProvider from "./context/ApiProvider.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <ApiProvider>
-    <BrowserRouter basename="/DGX_Community/">
+    {/* <BrowserRouter basename="/DGX_Community/"> */}
+    <BrowserRouter>
       <App />
     </BrowserRouter>
   </ApiProvider>
