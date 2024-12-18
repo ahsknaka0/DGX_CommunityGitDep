@@ -6,7 +6,7 @@ import "./index.css";
 import ApiProvider from "./context/ApiProvider.jsx";
 
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+const root = ReactDOM.createRoot(document.getElementById("root")).render(
   <ApiProvider>
     {/* <BrowserRouter basename="/DGX_Community/"> */}
     <BrowserRouter>
@@ -14,4 +14,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </BrowserRouter>
   </ApiProvider>
 );
+root.render(<App />);
 

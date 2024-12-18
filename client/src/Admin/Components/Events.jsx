@@ -4,6 +4,7 @@ import ApiContext from '../../context/ApiContext';
 import EventTable from '../../component/Calendar';
 
 
+
 const Events = () => {
   const { fetchData } = useContext(ApiContext);
   const [events, setEvents] = useState([])

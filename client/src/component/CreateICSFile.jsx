@@ -4,7 +4,7 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { createEvent } from 'ics';
+// import { createEvent } from 'ics';
 
 const localizer = momentLocalizer(moment);
 
@@ -48,48 +48,6 @@ const GeneralUserCalendar = ({ events }) => {
     };
   };
 
-  const downloadICS = () => {
-    if (!selectedEvent) return;
-
-    const event = {
-      start: [
-        moment(selectedEvent.StartDate).year(),
-        moment(selectedEvent.StartDate).month() + 1,
-        moment(selectedEvent.StartDate).date(),
-        moment(selectedEvent.StartDate).hour(),
-        moment(selectedEvent.StartDate).minute(),
-      ],
-      end: [
-        moment(selectedEvent.EndDate).year(),
-        moment(selectedEvent.EndDate).month() + 1,
-        moment(selectedEvent.EndDate).date(),
-        moment(selectedEvent.EndDate).hour(),
-        moment(selectedEvent.EndDate).minute(),
-      ],
-      title: selectedEvent.EventTitle,
-      description: selectedEvent.EventDescription,
-      location: selectedEvent.Venue,
-      organizer: { name: selectedEvent.Host, email: 'host@example.com' },
-      url: selectedEvent.RegistrationLink || '',
-    };
-
-    createEvent(event, (error, value) => {
-      if (error) {
-        console.error('Error creating ICS file:', error);
-        return;
-      }
-
-      const blob = new Blob([value], { type: 'text/calendar' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${selectedEvent.EventTitle.replace(/ /g, '_')}.ics`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
-  };
-
   return (
     <div className="container mx-auto mt-10">
       <div className="mb-5">
@@ -129,16 +87,8 @@ const GeneralUserCalendar = ({ events }) => {
               </span>
             </div>
             <div className="mb-4">
-              <strong className="text-xl underline">Category:</strong>
-              <span cla>
-                {selectedEvent.Category === 'giEvent'
-                  ? 'Global Infoventures Event'
-                  : selectedEvent.Category === 'nvidiaEvent'
-                    ? 'NVIDIA Event'
-                    : 'Other Event'}
-              </span>
+              <strong className="text-xl underline">Category:</strong> <span>{selectedEvent.Category}</span>
             </div>
-
             <div className="mb-4">
               <strong className="text-xl underline">Venue:</strong> <span>{selectedEvent.Venue}</span>
             </div>
@@ -147,7 +97,7 @@ const GeneralUserCalendar = ({ events }) => {
               <div className="mt-4" dangerouslySetInnerHTML={{ __html: selectedEvent.EventDescription }} />
             </div>
             <div className="mb-4">
-              <strong className="text-xl underline">Host:</strong> <span>{selectedEvent.Host}</span>
+              <strong className="text-xl underline">Host:</strong> <span>{selectedEvent.host}</span>
             </div>
             {selectedEvent.EventImage && (
               <img src={selectedEvent.EventImage} alt="Event Poster" className="mb-4 w-full max-w-3xl object-cover" />
@@ -163,9 +113,6 @@ const GeneralUserCalendar = ({ events }) => {
                   Register Here
                 </a>
               )}
-              <button onClick={downloadICS} className="bg-DGXgreen text-white p-2 rounded">
-                Download ICS
-              </button>
               <button
                 onClick={() => setSelectedEvent(null)}
                 className="bg-DGXblue text-white p-2 rounded"

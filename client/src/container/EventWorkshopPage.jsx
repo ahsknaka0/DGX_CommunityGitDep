@@ -1,71 +1,106 @@
 import { useState, useEffect, useContext } from "react";
-import { images } from '../constant/index.js';
+import { images } from "../constant/index.js";
 import GeneralUserCalendar from "../component/GeneralUserCalendar.jsx";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faShare } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp, faShare } from "@fortawesome/free-solid-svg-icons";
 import ApiContext from "../context/ApiContext.jsx";
 
-// CardContainer Component
-const CardContainer = ({ children, className, containerClassName }) => {
+const EventDetailsModal = ({ event, isOpen, onClose }) => {
+  if (!isOpen || !event) return null;
+
   return (
-    <div className={`py-20 flex items-center justify-center ${containerClassName}`}>
-      <div className={`flex items-center justify-center relative transition-all duration-200 ease-linear ${className}`}>
-        {children}
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-DGXwhite max-w-2xl w-full rounded-lg shadow-lg overflow-hidden">
+        <div className="h-full max-h-[90vh] overflow-y-auto p-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold">{event.EventTitle}</h2>
+            <button
+              onClick={onClose}
+              className="text-black font-bold text-xl"
+              aria-label="Close modal"
+            >
+              &times;
+            </button>
+          </div>
+          <div className="mt-4">
+            {/* Render HTML content from EventDescription */}
+            <div
+              className="text-gray-700"
+              dangerouslySetInnerHTML={{ __html: event.EventDescription }}
+            ></div>
+          </div>
+
+          <div className="flex justify-between mt-4">
+            <p className="text-sm text-gray-500">
+              <strong>Start Date:</strong> {new Date(event.StartDate).toLocaleString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false,
+              })}
+            </p>
+            <p className="text-sm text-gray-500">
+              <strong>End Date:</strong> {new Date(event.EndDate).toLocaleString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false,
+              })}
+            </p>
+
+            <p className="text-sm text-gray-500">
+              <strong>Venue:</strong> {event.Venue}
+            </p>
+          </div>
+          <img
+            src={event.EventImage}
+            alt={`Image for ${event.EventTitle}`}
+            className="w-full h-full object-cover rounded-lg my-4"
+          />
+          <div className="flex justify-center gap-4 mt-4">
+            <button
+              onClick={onClose}
+              className="mt-4 px-4 py-2 bg-DGXgreen text-DGXwhite rounded-md  hover:bg-green-600 transition"
+            >
+              Close
+            </button>
+            <button
+              onClick={onClose}
+              className="mt-4 px-4 py-2 bg-DGXgreen text-DGXwhite rounded-md  hover:bg-green-600 transition"
+            >
+              <a
+                  href={event.RegistrationLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Register Here
+                </a>
+            </button>
+          </div>
+
+
+        </div>
       </div>
     </div>
+
   );
 };
-
-// CardBody Component
-const CardBody = ({ children, className }) => {
-  return <div className={`h-70 w-96 ${className}`}>{children}</div>;
-};
-
-// CardItem Component
-const CardItem = ({ children, className }) => {
-  return <div className={`w-fit transition duration-200 ease-linear ${className}`}>{children}</div>;
-};
-
-// SkeletonLoader Component
-const SkeletonLoader = () => (
-  <div className="animate-pulse">
-    <div className="flex justify-center">
-      <div className="bg-gray-200 h-14 w-72 rounded-md mb-6"></div>
-    </div>
-    <div className="h-36 bg-gray-300 rounded-md mb-4"></div>
-    <div className="flex justify-between">
-      <div className="h-10 bg-gray-300 rounded-md w-24 mb-4"></div>
-      <div className="h-10 bg-gray-300 rounded-md w-16 mb-4"></div>
-    </div>
-  </div>
-);
 
 const EventWorkshopPage = () => {
   const [activeTab, setActiveTab] = useState("myCompany");
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Control for loader
+  const [isLoading, setIsLoading] = useState(true);
   const { fetchData } = useContext(ApiContext);
   const [dbevents, setDbvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const myCompanyEvents = [
-    { title: "Company Workshop: AI & Robotics", image: images.Event1 },
-    { title: "Company Event: Future of Data Science", image: images.Event2 },
-    { title: "Company Workshop: AI & Robotics", image: images.Event1 },
-  ];
-
-  const nvidiaEvents = [
-    { title: "NVIDIA CEO Jensen Huang and Lauren Goode at WIRED", image: images.Event1 },
-    { title: "NVIDIA CEO Jensen Huang and Mark Zuckerberg", image: images.Event2 },
-    { title: "NVIDIA CEO Jensen Huang and Lauren Goode at WIRED", image: images.Event1 },
-  ];
-
-  const oldEvents = [
-    { title: "Old Event 1", image: images.Event1 },
-    { title: "Old Event 2", image: images.Event2 },
-    { title: "Old Event 3", image: images.Event1 },
-  ];
-
-  const events = activeTab === "myCompany" ? myCompanyEvents : activeTab === "nvidia" ? nvidiaEvents : oldEvents;
 
   const handleTabChange = (tab) => {
     setIsAnimating(true);
@@ -75,43 +110,50 @@ const EventWorkshopPage = () => {
     }, 300);
   };
 
-  const handleShare = (event) => {
-    const shareData = {
-      title: event.title,
-      text: `Check out this event: ${event.title}`,
-      url: window.location.href,
-    };
-
+  const handleShare = async (event) => {
     if (navigator.share) {
-      navigator.share(shareData)
-        .then(() => alert('Successfully shared!'))
-        .catch((error) => alert(`Error sharing: ${error}`));
+      try {
+        await navigator.share({
+          title: event.EventTitle,
+          text: `Check out this event: ${event.EventTitle}`,
+          url: window.location.href, // Share the current page's URL
+        });
+        alert("Event shared successfully!");
+      } catch (error) {
+        console.error("Error sharing event:", error);
+      }
     } else {
-      navigator.clipboard.writeText(shareData.url)
-        .then(() => alert('Link copied to clipboard!'))
-        .catch((error) => alert(`Error copying link: ${error}`));
+      alert("Sharing is not supported on this browser.");
     }
+  };
+
+
+  const handleViewDetails = (event) => {
+    setSelectedEvent(event);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedEvent(null);
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
     const fetchEventData = async () => {
       try {
-        const endpoint = 'eventandworkshop/getEvent';
+        const endpoint = "eventandworkshop/getEvent";
         const eventData = await fetchData(endpoint);
-        console.log(eventData)
-        // Assuming the event data is nested in `data`
         setDbvents(eventData.data);
-  
-        // Stop loading after successful fetch
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching event data:', error);
-        setIsLoading(false); // Ensure loader stops even if there's an error
+        console.error("Error fetching event data:", error);
+        setIsLoading(false);
       }
     };
-  
+
     fetchEventData();
-  }, []);
+  }, [fetchData]);
+
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div className="relative isolate overflow-hidden bg-DGXwhite px-6 py-20 text-center sm:px-16 sm:shadow-sm">
@@ -122,81 +164,86 @@ const EventWorkshopPage = () => {
         <div className="mt-6 flex justify-center gap-6">
           <button
             onClick={() => handleTabChange("myCompany")}
-            className={`px-8 py-3 ${activeTab === "myCompany" ? 'bg-DGXgreen text-white' : 'bg-DGXwhite text-black'} border border-DGXgreen rounded-xl transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-DGXgreen`}
+            className={`px-8 py-3 ${activeTab === "myCompany"
+              ? "bg-DGXgreen text-white"
+              : "bg-DGXwhite text-black"
+              } border border-DGXgreen rounded-xl transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-DGXgreen`}
           >
             GI India Events
           </button>
           <button
             onClick={() => handleTabChange("nvidia")}
-            className={`px-8 py-3 ${activeTab === "nvidia" ? 'bg-DGXgreen text-white' : 'bg-DGXwhite text-black'} border border-DGXgreen rounded-xl transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-DGXgreen`}
+            className={`px-8 py-3 ${activeTab === "nvidia"
+              ? "bg-DGXgreen text-white"
+              : "bg-DGXwhite text-black"
+              } border border-DGXgreen rounded-xl transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-DGXgreen`}
           >
             NVIDIA Events
           </button>
           <button
             onClick={() => handleTabChange("oldEvents")}
-            className={`px-8 py-3 ${activeTab === "oldEvents" ? 'bg-DGXgreen text-white' : 'bg-DGXwhite text-black'} border border-DGXgreen rounded-xl transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-DGXgreen`}
+            className={`px-8 py-3 ${activeTab === "oldEvents"
+              ? "bg-DGXgreen text-white"
+              : "bg-DGXwhite text-black"
+              } border border-DGXgreen rounded-xl transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-DGXgreen`}
           >
             GI India Old Events
           </button>
         </div>
 
-        <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 transition-opacity duration-300 ease-in-out ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
-          {/* Show skeleton loader if loading */}
+        <div
+          className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 transition-opacity duration-300 ease-in-out ${isAnimating ? "opacity-0" : "opacity-100"
+            }`}
+        >
           {isLoading ? (
             Array.from({ length: 3 }).map((_, index) => (
-              <CardContainer
+              <div
                 key={index}
-                className="my-8 w-full"
-                containerClassName="border-2 border-DGXgreen bg-DGXblue rounded-lg overflow-hidden shadow-lg"
+                className="animate-pulse border-2 border-DGXgreen bg-DGXblue rounded-lg overflow-hidden shadow-lg p-6"
               >
-                <CardBody className="p-6 border border-DGXgreen flex flex-col justify-between h-full">
-                  <SkeletonLoader />
-                </CardBody>
-              </CardContainer>
+                {/* Add loader */}
+              </div>
             ))
           ) : (
-            // Show events once loaded
-            events.map((event, index) => (
-              <CardContainer
+            dbevents.map((event, index) => (
+              <div
                 key={index}
-                className="my-8 w-full"
-                containerClassName="border-2 border-DGXgreen bg-DGXblue rounded-lg overflow-hidden shadow-lg"
+                className="border-2 border-DGXgreen bg-DGXblue rounded-lg overflow-hidden shadow-lg p-6"
               >
-                <CardBody className="bg-gradient-to-r from-DGXgray via-DGXblue to-DGXblue p-6 border border-DGXgreen flex flex-col justify-between h-full">
-                  <CardItem>
-                    <h2 className="text-xl font-bold text-DGXwhite mb-4">{event.title}</h2>
-                    <img
-                      src={event.image}
-                      alt={`Image for ${event.title}`}
-                      className="mt-4 w-full h-40 object-cover rounded-md shadow-md"
-                    />
-                  </CardItem>
-
-                  <div className="flex justify-between mt-8">
-                    <div className="flex gap-4">
-                      <button className="px-6 py-2 bg-DGXgreen text-DGXwhite rounded-md hover:bg-green-600 transition">
-                        View Details
-                      </button>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <button
-                        className="px-4 py-2 bg-DGXwhite text-black rounded-md flex items-center gap-2 shadow-md hover:shadow-lg transition"
-                        onClick={() => handleShare(event)}
-                        aria-label={`Share ${event.title}`}
-                      >
-                        <FontAwesomeIcon icon={faShare} />
-                      </button>
-                    </div>
-                  </div>
-                </CardBody>
-              </CardContainer>
+                <h2 className="text-xl font-bold text-DGXwhite mb-4">
+                  {event.EventTitle}
+                </h2>
+                <img
+                  src={event.EventImage}
+                  alt={`Image for ${event.EventTitle}`}
+                  className="mt-4 w-full h-40 object-fill rounded-md shadow-md"
+                />
+                <div className="flex justify-between mt-4">
+                  <button
+                    onClick={() => handleViewDetails(event)}
+                    className="px-6 py-2 bg-DGXgreen text-DGXwhite rounded-md hover:bg-green-600 transition"
+                  >
+                    View Details
+                  </button>
+                  <button
+                    onClick={() => handleShare(event)}
+                    className="px-6 py-2 bg-DGXgreen hover:bg-green-600 text-DGXwhite rounded-md transition"
+                  >
+                    <FontAwesomeIcon icon={faShare} />
+                  </button>
+                </div>
+              </div>
             ))
+
           )}
         </div>
       </div>
-
-      <GeneralUserCalendar events={dbevents}/>
+      <GeneralUserCalendar events={dbevents} />
+      <EventDetailsModal
+        event={selectedEvent}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 };

@@ -29,16 +29,14 @@ import EventRegistrationPage from './component/EventRegistrationPage.jsx';
 import GeneralUserCalendar from './component/GeneralUserCalendar.jsx';
 import AdminDashboard from './Admin/AdminDashboard.jsx';
 import HomeAfterLoginComponent from './component/HomeAfterLoginComponent.jsx';
-import PostCode from './component/PostCode.jsx';
-
-
-
-
-
+// import PostCode from './component/PostCode.jsx';
+import CreateICSFile from './component/CreateICSFile.jsx';
+import SentimentAnalysis from './component/SentimentAnalysis.jsx';
 
 
 
 function App() {
+
   return (
     <>
       <div className="min-h-screen flex flex-col">
@@ -66,8 +64,11 @@ function App() {
             <Route path='/EventWorkshopPage' element={<EventWorkshopPage />} />
             <Route path='/EventRegistrationPage' element={<EventRegistrationPage />} />
             <Route path='/HomeAfterLoginComponent' element={<HomeAfterLoginComponent />} />
-            <Route path='/PostCode' element={<PostCode />} />
-            
+            {/* <Route path='/PostCode' element={<PostCode />} /> */}
+            <Route path='/CreateICSFile' element={<CreateICSFile />} />
+            <Route path='/SentimentAnalysis' element={<SentimentAnalysis />} />
+
+
 
 
             {  /*-----------ADMIN----------- */}
