@@ -8,7 +8,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 // import required modules
 // import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import { images } from "../constant/index.js";
+import { images } from '../../public/index.js';
 
 const CommunityGuidelines = () => {
 

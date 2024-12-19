@@ -3,7 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import ApiContext from '../context/ApiContext.jsx';
-import { images } from '../constant/index.js'; // Adjust the path relative to the component file
+import { images } from '../../public/index.js';
 import LoadPage from './LoadPage.jsx';
 
 const ForgotPassword = () => {

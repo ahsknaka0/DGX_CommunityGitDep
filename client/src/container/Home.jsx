@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { images } from '../constant/index.js';
+import { images } from '../../public/index.js';
 import { useNavigate } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import ApiContext from '../context/ApiContext.jsx';

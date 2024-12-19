@@ -3,7 +3,7 @@ import UserProfileChart from './UserProfileChart';
 import { FaFacebook, FaTwitter, FaLinkedin, FaGithub, FaEdit, FaUsers, FaPoll } from 'react-icons/fa';
 import { GoCommentDiscussion } from "react-icons/go";
 import { FaArrowTrendDown, FaArrowTrendUp, FaEllipsisVertical } from "react-icons/fa6";
-import { images } from '../constant/index.js';
+import { images } from '../../public/index.js';
 import ChangePassword from './ChangePassword.jsx';
 import { CgProfile } from "react-icons/cg";
 import { MdEventAvailable } from "react-icons/md";

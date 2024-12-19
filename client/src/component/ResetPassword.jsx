@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import ApiContext from "../context/ApiContext.jsx";
 import { decrypt } from "../utils/decrypt.js";
-import { images } from "../constant/index.js";
+import { images } from '../../public/index.js';
 import Cookies from "js-cookie";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import {

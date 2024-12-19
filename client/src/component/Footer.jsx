@@ -1,4 +1,6 @@
-import images from '../constant/images.js';
+import images from '../../public/images';
+// import logo from '../../public/logo';
+
 
 const Footer = () => {
   return (

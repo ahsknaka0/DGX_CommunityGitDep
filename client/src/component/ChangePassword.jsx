@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 import ApiContext from '../context/ApiContext.jsx';
 import { FaEye } from "react-icons/fa";
 import { FaEyeLowVision } from "react-icons/fa6";
-import { images } from "../constant/index.js";
+import { images } from '../../public/index.js';
 import LoadPage from './LoadPage.jsx';
 
 const ChangePassword = () => {

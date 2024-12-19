@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Marquee from "react-fast-marquee";
-import logo from "../constant/logo"; 
+import logo from "../../public/logo"; 
 
 const LogoMarquee = () => {
   const [isLoaded, setIsLoaded] = useState(false);

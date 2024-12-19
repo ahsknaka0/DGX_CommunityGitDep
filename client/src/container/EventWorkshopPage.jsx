@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { images } from '../constant/index.js';
+import { images } from '../../public/index.js';
 import GeneralUserCalendar from "../component/GeneralUserCalendar.jsx";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faShare } from '@fortawesome/free-solid-svg-icons';

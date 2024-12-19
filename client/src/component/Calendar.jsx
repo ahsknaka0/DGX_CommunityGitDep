@@ -9,7 +9,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 // import ApiContext from '../context/ApiContext.jsx';
 import ApiContext from '../context/ApiContext.jsx';
-import { compressImage } from '../utils/compressImage.js';
+import { images } from '../../public/index.js';
 
 
 

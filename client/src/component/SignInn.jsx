@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { images } from "../constant/index.js";
+import { images } from '../../public/index.js';
+
 import { FaEye } from "react-icons/fa";
 import { FaEyeLowVision } from "react-icons/fa6";
 import { ToastContainer, toast } from "react-toastify";
