@@ -7,7 +7,6 @@ import blogData from "../json/blogsData.json"
 
 
 
-
 const BlogPage = () => {
     const [blogs, setBlogs] = useState(blogData);
     const [loading, setLoading] = useState(true); // Added loading state
@@ -19,19 +18,20 @@ const BlogPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     // const [blogs, setBlogs] = useState(blogData);
 
-
     // useEffect(() => {
-    //     fetch('./blogsData.json')
-    //         .then(res => res.json())
-    //         .then(data => {
-    //             setBlogs(data);
-    //             setLoading(false); // Set loading to false after data is fetched
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching blogs:', error);
-    //             setLoading(false); // Ensure loading is false even on error
-    //         });
-    // }, []);
+    //     fetch('blogsData.json')
+    //       .then(res => res.json())
+    //       .then(data => {
+    //         console.log(data);  // Check if the data is correctly fetched
+    //         setBlogs(data);
+    //         setLoading(false); // Set loading to false after data is fetched
+    //       })
+    //       .catch(error => {
+    //         console.error('Error fetching blogs:', error);
+    //         setLoading(false); // Ensure loading is false even on error
+    //       });
+    //   }, []);
+      
 
     const allCategories = [...new Set(blogs.map(blog => blog.category))];
 

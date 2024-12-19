@@ -2,22 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import Skeleton from 'react-loading-skeleton'; // Import Skeleton
-import 'react-loading-skeleton/dist/skeleton.css'; // Import Skeleton styles
-// import { images } from '../constant/index.js'; // Make sure images are available
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import { createEvent } from 'ics';
 
 const localizer = momentLocalizer(moment);
 
 const eventColors = {
   giEvent: '#013D54', // DGXblue
-  nvidiaEvent: '#76B900',    // DGXgreen
+  nvidiaEvent: '#76B900', // DGXgreen
 };
 
-
 const GeneralUserCalendar = ({ events }) => {
-  
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const loadEvents = async () => {
       setIsLoading(true);
@@ -27,16 +26,15 @@ const GeneralUserCalendar = ({ events }) => {
     loadEvents();
   }, []);
 
-  const handleSelectEvent = (events) => {
-    setSelectedEvent(events);
+  const handleSelectEvent = (event) => {
+    setSelectedEvent(event);
     document.getElementById('event-detail').scrollIntoView({ behavior: 'smooth' });
   };
 
   const eventStyleGetter = (event) => {
-    const backgroundColor = eventColors[event.Category] || '#C0C0C0'; // Default color
+    const backgroundColor = eventColors[event.Category] || '#C0C0C0';
     return {
       style: {
-        
         backgroundColor,
         color: 'white',
         borderRadius: '5px',
@@ -50,12 +48,56 @@ const GeneralUserCalendar = ({ events }) => {
     };
   };
 
- 
+  const downloadICS = () => {
+    if (!selectedEvent) return;
+
+    const event = {
+      start: [
+        moment(selectedEvent.StartDate).year(),
+        moment(selectedEvent.StartDate).month() + 1,
+        moment(selectedEvent.StartDate).date(),
+        moment(selectedEvent.StartDate).hour(),
+        moment(selectedEvent.StartDate).minute(),
+      ],
+      end: [
+        moment(selectedEvent.EndDate).year(),
+        moment(selectedEvent.EndDate).month() + 1,
+        moment(selectedEvent.EndDate).date(),
+        moment(selectedEvent.EndDate).hour(),
+        moment(selectedEvent.EndDate).minute(),
+      ],
+      title: selectedEvent.EventTitle,
+      description: selectedEvent.EventDescription,
+      location: selectedEvent.Venue,
+      organizer: { name: selectedEvent.Host, email: 'host@example.com' },
+      url: selectedEvent.RegistrationLink || '',
+    };
+
+    createEvent(event, (error, value) => {
+      if (error) {
+        console.error('Error creating ICS file:', error);
+        return;
+      }
+
+      const blob = new Blob([value], { type: 'text/calendar' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${selectedEvent.EventTitle.replace(/ /g, '_')}.ics`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  };
+
   return (
     <div className="container mx-auto mt-10">
       <div className="mb-5">
-        <h1 className=" flex items-center justify-center text-2xl font-bold mb-4">Our Event and Workshop Calendar</h1>
+        <h1 className="flex items-center justify-center text-2xl font-bold mb-4">
+          Our Event and Workshop Calendar
+        </h1>
       </div>
+
       {isLoading ? (
         <Skeleton height={600} className="bg-gray-200 rounded-lg mb-10" />
       ) : (
@@ -71,27 +113,41 @@ const GeneralUserCalendar = ({ events }) => {
           onSelectEvent={handleSelectEvent}
         />
       )}
+
       {selectedEvent && (
         <div id="event-detail" className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg p-5 max-w-3xl w-full max-h-[90vh] overflow-y-auto z-50">
             <h2 className="text-4xl font-bold mb-10 flex justify-center">Event Details</h2>
             <div className="mb-4">
-              <strong className='text-xl underline'>Title:</strong> <span>{selectedEvent.EventTitle}</span>
+              <strong className="text-xl underline">Title:</strong> <span>{selectedEvent.EventTitle}</span>
             </div>
             <div className="mb-4">
-              <strong className='text-xl underline'>Date & Time:</strong> <span>{moment(selectedEvent.StartDate).format('MMMM D, YYYY h:mm A')} - {moment(selectedEvent.end).format('MMMM D, YYYY h:mm A')}</span>
+              <strong className="text-xl underline">Date & Time:</strong>{' '}
+              <span>
+                {moment(selectedEvent.StartDate).format('MMMM D, YYYY h:mm A')} -{' '}
+                {moment(selectedEvent.EndDate).format('MMMM D, YYYY h:mm A')}
+              </span>
             </div>
             <div className="mb-4">
-              <strong className='text-xl underline'>Category:</strong> <span>{selectedEvent.Category}</span>
+              <strong className="text-xl underline">Category:</strong>
+              <span cla>
+                {selectedEvent.Category === 'giEvent'
+                  ? 'Global Infoventures Event'
+                  : selectedEvent.Category === 'nvidiaEvent'
+                    ? 'NVIDIA Event'
+                    : 'Other Event'}
+              </span>
+            </div>
+
+            <div className="mb-4">
+              <strong className="text-xl underline">Venue:</strong> <span>{selectedEvent.Venue}</span>
             </div>
             <div className="mb-4">
-              <strong className='text-xl underline'>Venue:</strong> <span>{selectedEvent.Venue}</span>
+              <strong className="text-xl underline">Description:</strong>{' '}
+              <div className="mt-4" dangerouslySetInnerHTML={{ __html: selectedEvent.EventDescription }} />
             </div>
             <div className="mb-4">
-              <strong className='text-xl underline'>Description:</strong> <div className='mt-4' dangerouslySetInnerHTML={{ __html: selectedEvent.EventDescription }} />
-            </div>
-            <div className="mb-4">
-              <strong className='text-xl underline'>Host:</strong> <span>{selectedEvent.host}</span>
+              <strong className="text-xl underline">Host:</strong> <span>{selectedEvent.Host}</span>
             </div>
             {selectedEvent.EventImage && (
               <img src={selectedEvent.EventImage} alt="Event Poster" className="mb-4 w-full max-w-3xl object-cover" />
@@ -107,13 +163,15 @@ const GeneralUserCalendar = ({ events }) => {
                   Register Here
                 </a>
               )}
+              <button onClick={downloadICS} className="bg-DGXgreen text-white p-2 rounded">
+                Download ICS
+              </button>
               <button
                 onClick={() => setSelectedEvent(null)}
                 className="bg-DGXblue text-white p-2 rounded"
               >
                 Close
               </button>
-              
             </div>
           </div>
         </div>

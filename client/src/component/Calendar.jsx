@@ -13,13 +13,6 @@ import { images } from '../../public/index.js';
 
 
 
-const eventColors = {
-  workshop: '#013D54',
-  event: '#76B900',
-};
-
-
-
 const EventTable = () => {
   const localizer = momentLocalizer(moment);
   const { fetchData, userToken } = useContext(ApiContext);
@@ -38,7 +31,7 @@ const EventTable = () => {
     registerLink: '', // Add registerLink to state
   });
 
-  
+
   useEffect(() => {
     const fetchEvents = async () => {
       const endpoint = "eventandworkshop/getEvent"; // Adjust the endpoint to your API
@@ -86,7 +79,7 @@ const EventTable = () => {
   const registerLinkRef = useRef(null);
 
 
- 
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -245,11 +238,11 @@ const EventTable = () => {
         </button>
       </div>
 
-      <div className="event-table">
-        <table className="table-auto w-full mt-4">
-          <thead>
-            <tr>
-              <th className="px-4 py-2">Title</th>
+      <div className="event-table flex items-center justify-center">
+        <table className="table-fixed border bottom-2 w-full mt-4">
+          <thead className='bg-DGXgreen text-white'>
+            <tr >
+              <th className="px-4 py-2 w-2/6">Title</th>
               <th className="px-4 py-2">Start Date</th>
               <th className="px-4 py-2">End Date</th>
               <th className="px-4 py-2">Category</th>
@@ -259,16 +252,19 @@ const EventTable = () => {
           </thead>
           <tbody>
             {events.map((event, index) => (
-              <tr key={index}>
-                <td className="px-4 py-2">{event.EventTitle}</td>
+              <tr className='text-center' key={index}>
+                <td className="px-4 py-2 w-2/6 bg-DGXgreen/15">
+                  {event.EventTitle.length > 50 ? `${event.EventTitle.slice(0, 50)}...` : event.EventTitle}
+                </td>
+
                 <td className="px-4 py-2">{new Date(event.StartDate).toLocaleDateString()}</td>
-                <td className="px-4 py-2">{new Date(event.EndDate).toLocaleDateString()}</td>
-                <td className="px-4 py-2">{event.Category}</td>
-                <td className="px-4 py-2">{event.Venue}</td>
+                <td className="px-4 py-2 bg-DGXgreen/15">{new Date(event.EndDate).toLocaleDateString()}</td>
+                <td className="px-4 py-2">{event.Category === 'giEvent' ? 'Global Infoventures Event' : event.Category === 'nvidiaEvent' ? 'NVIDIA Event' : 'Other Event'}</td>
+                <td className="px-4 py-2 bg-DGXgreen/15">{event.Venue}</td>
                 <td className="px-4 py-2">
                   {/* Add actions like Edit or Delete */}
-                  <button onClick={() => handleEditEvent(event)}>Edit</button>
-                  <button onClick={() => handleDeleteEvent(event)}>Delete</button>
+                  <button className='font-medium hover:text-DGXgreen' onClick={() => handleEditEvent(event)}>Edit</button>
+                  <button className='ml-2 text-red-500 font-medium' onClick={() => handleDeleteEvent(event)}>Delete</button>
                 </td>
               </tr>
             ))}

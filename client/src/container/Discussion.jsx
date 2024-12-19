@@ -29,6 +29,8 @@ const Discussion = () => {
 
     loadEvents();
   }, []);
+
+  
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -236,6 +238,7 @@ const Discussion = () => {
     setModalIsOpen(false);
     setIsFormOpen(false);
   };
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleTagInputChange = (e) => setTagInput(e.target.value);
 
@@ -457,14 +460,27 @@ const Discussion = () => {
               className="w-full xs:w-full sm:w-64 bg-lime-500 rounded-lg mb-1 sm:mt-4"
             />
           ) : (
-            <button
-              type="button"
-              className="py-2 xs:w-full px-3 gap-x-2 text-sm font-bold rounded-lg bg-DGXgreen text-DGXwhite shadow-sm hover:bg-DGXblue hover:border-DGXgreen border border-DGXblue disabled:opacity-50 disabled:pointer-events-none"
-              onClick={() => { setIsFormOpen(true) }}
-            >
-              Start a New Topic +
-            </button>
+            isLoggedIn ? (
+              <button
+                type="button"
+                className="py-2 xs:w-full px-3 gap-x-2 text-sm font-bold rounded-lg bg-DGXgreen text-DGXwhite shadow-sm hover:bg-DGXblue hover:border-DGXgreen border border-DGXblue disabled:opacity-50 disabled:pointer-events-none"
+                onClick={() => { setIsFormOpen(true) }}
+              >
+                Start a New Topic +
+              </button>
+            ) : (
+
+              <a href="/SignInn" target="_blank" className="font-semibold text-DGXwhite bd">
+                <button
+                  type="button"
+                  className="py-2 xs:w-full px-3 gap-x-2 text-sm font-bold rounded-lg bg-DGXgreen text-DGXwhite shadow-sm hover:bg-DGXblue hover:border-DGXgreen border border-DGXblue disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  Start a New Topic +
+                </button>
+              </a>
+            )
           )}
+
 
         </nav>
       </header>
@@ -510,7 +526,13 @@ const Discussion = () => {
                         {topic.Title}
                       </a>
                     </h3>
-                    <p className="text-DGXblack mt-2">{(topic.Content).substring(0, 150)}</p>
+                    <p
+                      className="text-DGXblack mt-2 overflow-hidden"
+                      dangerouslySetInnerHTML={{
+                        __html: topic.Content.substring(0, 150),
+                      }}
+                    />
+
                   </div>
                 ))
               )}
@@ -725,13 +747,29 @@ const Discussion = () => {
                       <h3 className="text-lg font-bold md:text-lg lg:text-xl xl:text-2xl">
                         {discussion.Title}
                       </h3>
-                      <p className="text-gray-600 text-sm md:text-base lg:text-lg xl:text-xl">
+                      <p className="text-gray-600 text-sm md:text-base lg:text-lg xl:text-xl xs:overflow-hidden">
                         {discussion.Content.length > 500 ? (
                           <>
-                            {discussion.Content.substring(0, 497)}
-                            <span className='text-blue-700 cursor-pointer' onClick={() => { openModal(discussion) }}>...see more</span>
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: discussion.Content.substring(0, 497),
+                              }}
+                            />
+                            <span
+                              className="text-blue-700 cursor-pointer"
+                              onClick={() => openModal(discussion)}
+                            >
+                              ...see more
+                            </span>
                           </>
-                        ) : discussion.Content}
+                        ) : (
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: discussion.Content,
+                            }}
+                          />
+                        )}
+
                       </p>
                     </div>
                     {discussion.Image && (
@@ -768,10 +806,7 @@ const Discussion = () => {
                 ))
               )}
 
-
             </div>
-
-
 
           </div>
         </section>
@@ -793,17 +828,23 @@ const Discussion = () => {
                 <div className="mb-8">
                   <h2 className="text-2xl font-bold mb-4">Community Highlights</h2>
                   <div className="space-y-4">
-                    {hotTopics.map((topic, index) => (
+                    {communityHighlights.map((topic) => (
                       <div
-                        key={index}
-                        className="rounded-lg shadow-lg p-4 border border-DGXblack hover:bg-DGXgreen/50 transition-transform transform hover:scale-105 hover:shadow-xl"
+                        key={topic.DiscussionID}
+                        className="rounded-lg shadow-lg p-4 border hover:bg-DGXgreen/50 border-DGXblack transition-transform transform hover:scale-105 hover:shadow-xl"
+                        onClick={() => openModal(topic)}
                       >
                         <h3 className="text-xl font-semibold">
                           <a href={topic.link} className="text-DGXblack hover:underline">
-                            {topic.title}
+                            {topic.Title}
                           </a>
                         </h3>
-                        <p className="text-DGXblack mt-2">{topic.description}</p>
+                        <p
+                          className="text-DGXblack mt-2 overflow-hidden"
+                          dangerouslySetInnerHTML={{
+                            __html: topic.Content.substring(0, 150),
+                          }}
+                        />
                       </div>
                     ))}
                   </div>
@@ -813,11 +854,11 @@ const Discussion = () => {
                   <div className="space-y-2">
                     {topUsers.map((user, index) => (
                       <div
-                        key={index}
+                        key={user.userID}
                         className="flex justify-between items-center bg-DGXblue border border-gray-200 rounded-lg shadow-sm p-3 hover:shadow-xl hover:scale-105 transition-colors"
                       >
-                        <span className="font-medium text-white">{user.name}</span>
-                        <span className="text-white">{user.points} points</span>
+                        <span className="font-medium text-white">{user.userName}</span>
+                        <span className="text-white">{user.count} Post(s)</span>
                       </div>
                     ))}
                   </div>

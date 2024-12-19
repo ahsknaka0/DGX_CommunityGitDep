@@ -1,29 +1,33 @@
 import React, { useEffect, useState } from "react";
+import { images } from '../constant/index.js';
 
 const BlogImage = () => {
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
-	const images = [
-		"public/bg1.jpg",
-		"public/bg2.jpg",
-		"public/bg3.jpg",
+	const imageS = [
+		images.bg1,
+		images.bg2,
+		images.bg3,
 	];
 
+	// Automatic image rotation
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-		}, 5000);
+			setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageS.length);
+		}, 5000); // Rotate every 5 seconds
 		return () => clearInterval(interval);
-	}, [images.length]);
+	}, [imageS.length]);
+
 	return (
-		<div> <div
+		<div
 			className="py-20 md:py-40 bg-black text-center text-DGXgreen px-4 relative"
 			style={{
-				backgroundImage: `url(${images[currentImageIndex]})`,
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-				transition: 'background-image 1s ease-in-out',
+				backgroundImage: `url(${imageS[currentImageIndex]})`,
+				backgroundSize: "cover",
+				backgroundPosition: "center",
+				transition: "background-image 1s ease-in-out",
 			}}
 		>
+			{/* Overlay for better text readability */}
 			<div className="absolute inset-0 bg-black opacity-50"></div>
 			<div className="relative z-10">
 				<h1 className="text-3xl md:text-5xl lg:text-7xl font-bold leading-snug mb-5">
@@ -36,8 +40,7 @@ const BlogImage = () => {
 				</p>
 			</div>
 		</div>
-		</div>
-	)
-}
+	);
+};
 
-export default BlogImage
+export default BlogImage;
