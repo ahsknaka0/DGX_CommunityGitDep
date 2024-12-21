@@ -275,18 +275,18 @@ const UserProfile = () => {
                 <div className="w-full lg:w-3/4 bg-DGXwhite rounded-lg shadow-xl md:p-4 md:border border-DGXgreen mx-auto">
                     {activeTab === 'profile' && (
                         <div className="flex flex-col w-full 2xl:w-3/3 ">
-                            <div className="flex bg-DGXwhite rounded-lg shadow-xl p-2 md:p-4 border border-DGXgreen ">
+                            {/* <div className="flex bg-DGXwhite rounded-lg shadow-xl p-2 md:p-4 border border-DGXgreen ">
                                 <div className="flex-1">
                                     <h4 className="text-xl text-[#111827] font-bold">About</h4>
                                     <p className="mt-2 text-DGXgray">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt voluptates obcaecati numquam error et ut fugiat asperiores. Sunt nulla ad incidunt laboriosam, laudantium est unde natus cum numquam, neque facere. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, magni odio magnam commodi sunt ipsum eum! Voluptas eveniet aperiam at maxime, iste id dicta autem odio laudantium eligendi commodi distinctio!</p>
                                 </div>
                                 <div className="flex items-end mt-4">
-                                    {/* User badges go here */}
+                                   
                                     <span className="badge">Badge 1</span>
                                     <span className="badge">Badge 2</span>
-                                    {/* Add more badges as needed */}
+                                    
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="flex-1/2 bg-DGXwhite rounded-lg shadow-xl mt-4 p-2 md:p-8 border border-DGXgreen">
                                 <h4 className="text-xl text-[#111827] font-bold">Statistics</h4>
                                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-4">

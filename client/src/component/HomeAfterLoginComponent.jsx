@@ -27,6 +27,7 @@ const HomeAfterLoginComponent = () => {
         { id: 2, name: 'Assets under holding', value: '$119 trillion' },
         { id: 3, name: 'New users annually', value: '46,000' },
     ]
+    
 
 
     const [currentSlide, setCurrentSlide] = useState(0);

@@ -18,6 +18,8 @@ const Discussion = () => {
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Loading state
 
+
+
   useEffect(() => {
     // Simulating data fetching
     const loadEvents = async () => {
@@ -30,7 +32,7 @@ const Discussion = () => {
     loadEvents();
   }, []);
 
-  
+
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -239,6 +241,17 @@ const Discussion = () => {
     setIsFormOpen(false);
   };
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+    useEffect(() => {
+        if (userToken && user) {
+            setIsLoggedIn(true);
+            console.log(user);
+
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, [user, userToken]);
+  
+  
 
   const handleTagInputChange = (e) => setTagInput(e.target.value);
 
@@ -470,14 +483,14 @@ const Discussion = () => {
               </button>
             ) : (
 
-              <a href="/SignInn" target="_blank" className="font-semibold text-DGXwhite bd">
-                <button
-                  type="button"
-                  className="py-2 xs:w-full px-3 gap-x-2 text-sm font-bold rounded-lg bg-DGXgreen text-DGXwhite shadow-sm hover:bg-DGXblue hover:border-DGXgreen border border-DGXblue disabled:opacity-50 disabled:pointer-events-none"
-                >
-                  Start a New Topic +
-                </button>
+              <a
+                href="/SignInn"
+                target="_blank"
+                className="py-2 xs:w-full px-3 gap-x-2 text-sm font-bold rounded-lg bg-DGXgreen text-DGXwhite shadow-sm hover:bg-DGXblue hover:border-DGXgreen border border-DGXblue disabled:opacity-50 disabled:pointer-events-none"
+              >
+                Start a New Topic +
               </a>
+
             )
           )}
 
