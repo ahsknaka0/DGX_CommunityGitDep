@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { images } from '../constant/index.js';
+import images from '../../public/images.js'; 
 import { FaEye } from "react-icons/fa";
 import { FaEyeLowVision } from "react-icons/fa6";
 import { ToastContainer, toast } from "react-toastify";
@@ -169,7 +169,7 @@ const SignIn = () => {
                   htmlFor="username"
                   className={`absolute opacity-60 left-4 transition-all duration-300 ${usernameFocus ? 'top-0 text-xs text-DGXgreen' : 'top-1/2 transform -translate-y-1/2'}`}
                 >
-                  Username or email address
+                Email address-:
                 </label>
                 <input
                   id="username"
@@ -187,7 +187,7 @@ const SignIn = () => {
                   htmlFor="password"
                   className={`absolute opacity-60 left-4 transition-all duration-300 ${passwordFocus ? 'top-0 text-xs text-DGXgreen' : 'top-1/2 transform -translate-y-1/2'}`}
                 >
-                  Password
+                  Password-:
                 </label>
                 <input
                   id="password"

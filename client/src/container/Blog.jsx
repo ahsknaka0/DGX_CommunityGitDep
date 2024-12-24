@@ -1,37 +1,70 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TbUserSquareRounded } from "react-icons/tb";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import BlogImage from "../component/BlogImage";
 import blogData from "../json/blogsData.json"
+import ApiContext from "../context/ApiContext";
+import { toast } from "react-toastify";
 
 
 
 const BlogPage = () => {
-    const [blogs, setBlogs] = useState(blogData);
-    const [loading, setLoading] = useState(true); // Added loading state
+    const { fetchData } = useContext(ApiContext);
+    const [blogs, setBlogs] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [pageSize, setPageSize] = useState(10);
     const [showAll, setShowAll] = useState(false);
     const [selectedBlog, setSelectedBlog] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // const [blogs, setBlogs] = useState(blogData);
+    useEffect(() => {
+        try {
+            const fetchBlogs = () => {
+                try {
+                    const endpoint = "blog/getBlog";
+                    const method = "POST";
+                    const headers = {
+                        'Content-Type': 'application/json',
+                    };
 
-    // useEffect(() => {
-    //     fetch('blogsData.json')
-    //       .then(res => res.json())
-    //       .then(data => {
-    //         console.log(data);  // Check if the data is correctly fetched
-    //         setBlogs(data);
-    //         setLoading(false); // Set loading to false after data is fetched
-    //       })
-    //       .catch(error => {
-    //         console.error('Error fetching blogs:', error);
-    //         setLoading(false); // Ensure loading is false even on error
-    //       });
-    //   }, []);
-      
+                    setLoading(true);
+                    fetchData(endpoint, method, headers)
+                        .then(result => {
+                            if (result && result.data) {
+                                return result.data;
+                            } else {
+                                throw new Error("Invalid data format");
+                            }
+                        })
+                        .then((data) => {
+                            console.log(data);
+                            setBlogs(data)
+                        })
+                        .catch(error => {
+                            setLoading(false);
+                            toast.error(`Something went wrong: ${error.message}`, {
+                                position: "top-center",
+                                autoClose: 3000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: "light",
+                            });
+                        });
+                } catch (error) {
+                    console.log(error)
+                }
+            };
+            fetchBlogs()
+        } catch (error) {
+            console.log(error)
+        }
+
+    }, [fetchData]);
 
     const allCategories = [...new Set(blogs.map(blog => blog.category))];
 
@@ -52,7 +85,6 @@ const BlogPage = () => {
 
     const Blog = ({ blog }) => {
         const { title, image, author, published_date } = blog || {};
-
         return (
             <div className="shadow-md shadow-gray-500 relative cursor-pointer" onClick={() => openModal(blog)}>
                 <div>
@@ -88,9 +120,9 @@ const BlogPage = () => {
                             </p>
                             <p className="mb-4 text-sm text-gray-500 text-center">Published: {published_date}</p>
                             <p className="text-lg text-justify">{content}</p>
-                            
+
                         </div>
-                
+
                         <div>
                             <button
                                 className="m-6 bg-DGXblue text-white px-6 py-2 rounded-lg hover:bg-red-"

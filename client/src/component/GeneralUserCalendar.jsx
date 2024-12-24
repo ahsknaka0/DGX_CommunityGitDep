@@ -4,7 +4,7 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { createEvent } from 'ics';
+// import { createEvent } from 'ics';
 
 const localizer = momentLocalizer(moment);
 
