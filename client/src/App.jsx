@@ -32,6 +32,7 @@ import HomeAfterLoginComponent from './component/HomeAfterLoginComponent.jsx';
 // import PostCode from './component/PostCode.jsx';
 import CreateICSFile from './component/CreateICSFile.jsx';
 import SentimentAnalysis from './component/SentimentAnalysis.jsx';
+import BlogManager from './Admin/Components/BlogManager.jsx';
 
 
 
@@ -80,6 +81,7 @@ function App() {
             <Route path='/LoadPage' element={<LoadPage />} />
             <Route path='/Calendar' element={<Calendar />} />
             <Route path='/GeneralUserCalendar' element={<GeneralUserCalendar />} />
+            {/* <Route path='/BlogManager' element={<BlogManager/>}/> */}
           </Routes>
         </div>
         <Footer />

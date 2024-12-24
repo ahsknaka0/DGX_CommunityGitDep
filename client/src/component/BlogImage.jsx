@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { images } from '../constant/index.js';
+import { images } from '../../public'
 
 const BlogImage = () => {
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -10,12 +10,12 @@ const BlogImage = () => {
 	];
 
 	// Automatic image rotation
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageS.length);
-		}, 5000); // Rotate every 5 seconds
-		return () => clearInterval(interval);
-	}, [imageS.length]);
+	// useEffect(() => {
+	// 	const interval = setInterval(() => {
+	// 		setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageS.length);
+	// 	}, 5000); // Rotate every 5 seconds
+	// 	return () => clearInterval(interval);
+	// }, [imageS.length]);
 
 	return (
 		<div

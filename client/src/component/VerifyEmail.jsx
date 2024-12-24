@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { images } from "../constant/index.js";
+import { images } from "../../public/index.js";
 import { IoRefreshCircleSharp } from "react-icons/io5";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

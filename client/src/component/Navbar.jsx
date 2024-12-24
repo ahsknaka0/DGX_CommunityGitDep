@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { images } from '../constant/index.js';
+import { images } from '../../public/index.js';
 import { AiOutlineMenu } from "react-icons/ai";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import clsx from 'clsx';

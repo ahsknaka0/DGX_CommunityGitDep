@@ -318,6 +318,7 @@ const Discussion = () => {
 
     try {
       const data = await fetchData(endpoint, method, body, headers);
+      // console.l
       if (!data.success) {
         setLoading(false);
         toast.error(`Error in posting discussion try again: ${data.message}`, {
@@ -440,31 +441,7 @@ const Discussion = () => {
             )}
           </div>
 
-          {/* <div className="sm:order-3 flex items-center gap-x-2">
-            <button
-              type="button"
-              className="sm:hidden hs-collapse-toggle p-2.5 inline-flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-              aria-controls="navbar-alignment"
-              aria-label="Toggle navigation"
-              onClick={toggleNav}
-            >
-              <svg className={`${isNavOpen ? 'hidden' : 'block'} flex-shrink-0 size-4`} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="3" x2="21" y1="6" y2="6" />
-                <line x1="3" x2="21" y1="12" y2="12" />
-                <line x1="3" x2="21" y1="18" y2="18" />
-              </svg>
-              <svg className={`${isNavOpen ? 'block' : 'hidden'} flex-shrink-0 size-4`} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 6 6 18" />
-                <path d="m6 6 12 12" />
-              </svg>
-            </button>
-          </div> */}
           <div id="navbar-alignment" className={`${isNavOpen ? 'block' : 'hidden'} hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:grow-0 sm:basis-auto sm:block sm:order-2`}>
-            {/* <div className="flex flex-col gap-6 mt-5 sm:flex-row sm:items-center sm:mt-0 sm:ps-5">
-              <a className="text-lg font-bold text-DGXwhite cursor-pointer" onClick={() => setSelectedSection('all')} aria-current="page">All</a>
-              <a className="text-lg font-bold text-DGXwhite cursor-pointer" onClick={() => setSelectedSection('top')}>Top Discussions</a>
-              <a className="text-lg font-bold text-DGXwhite cursor-pointer" onClick={() => setSelectedSection('recent')}>Recent Discussions</a>
-            </div> */}
           </div>
           {isLoading ? (
             <Skeleton
@@ -472,8 +449,10 @@ const Discussion = () => {
               width={150}
               className="w-full xs:w-full sm:w-64 bg-lime-500 rounded-lg mb-1 sm:mt-4"
             />
-          ) : (
-            isLoggedIn ? (
+          ) 
+          : 
+          (
+            user ? (    
               <button
                 type="button"
                 className="py-2 xs:w-full px-3 gap-x-2 text-sm font-bold rounded-lg bg-DGXgreen text-DGXwhite shadow-sm hover:bg-DGXblue hover:border-DGXgreen border border-DGXblue disabled:opacity-50 disabled:pointer-events-none"
@@ -481,14 +460,16 @@ const Discussion = () => {
               >
                 Start a New Topic +
               </button>
-            ) : (
+           ) :
+            (
 
-              <a
-                href="/SignInn"
-                target="_blank"
-                className="py-2 xs:w-full px-3 gap-x-2 text-sm font-bold rounded-lg bg-DGXgreen text-DGXwhite shadow-sm hover:bg-DGXblue hover:border-DGXgreen border border-DGXblue disabled:opacity-50 disabled:pointer-events-none"
-              >
-                Start a New Topic +
+              <a href="/SignInn" className="font-semibold text-DGXwhite bd">
+                <button
+                  type="button"
+                  className="py-2 xs:w-full px-3 gap-x-2 text-sm font-bold rounded-lg bg-DGXgreen text-DGXwhite shadow-sm hover:bg-DGXblue hover:border-DGXgreen border border-DGXblue disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  Start a New Topic +
+                </button>
               </a>
 
             )
