@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import ApiContext from '../context/ApiContext.jsx';
 import { ToastContainer, toast, } from "react-toastify";
+import EditProfileModal from './EditProfileModal'; 
 
 const UserProfile = () => {
     const [showEmailInput, setShowEmailInput] = useState(false);
@@ -39,6 +40,22 @@ const UserProfile = () => {
             setBackgroundImage(imageUrl);
         }
     };
+    const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+
+  // Example user profile data (replace this with actual user data in your application)
+  const userProfile = {
+    name: 'John Doe',
+    email: 'johndoe@example.com',
+    address: '123 Main St, Cityville',
+    phoneNumber: '123-456-7890',
+    aboutMe: 'Hello, I am John Doe.',
+  };
+
+  // Function to open the modal
+  const openModal = () => setIsModalOpen(true);
+
+  // Function to close the modal
+  const closeModal = () => setIsModalOpen(false);
 
     useEffect(() => {
         if (userToken != null && user != null && userToken != undefined && user != undefined) {
@@ -150,30 +167,64 @@ const UserProfile = () => {
                             <img src={images.NvidiaBackground} className="w-full h-full rounded-tl-lg rounded-tr-lg" alt="Profile background" />
                         </div>
                         <div className="flex flex-col items-center -mt-20">
-                            <div className="w-40 border-4 border-DGXgreen  rounded-full">
-                                <img src={backgroundImage} className='rounded-full' alt="Profile" />
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="absolute  opacity-0 cursor-pointer"
-                                    onChange={handleImageChange}
-                                    title="Click to change background image"
-                                />
-                            </div>
-                            <div>
-                                <FaEdit className="text-DGXblack text-3xl" />
-                            </div>
-                            <div className="flex items-center space-x-2 mt-2">
-                                <p className="text-2xl">{user.Name}</p>
-                                <span className="bg-[#2563eb] rounded-full p-1" title="Verified">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="text-DGXwhite h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                            </div>
-                            <p className="text-DGXgray">{user.Designation}</p>
-                            <p className="text-sm text-[#6b7280]">{user.EmailId}</p>
-                        </div>
+      {/* Profile Image Section */}
+      <div className="relative w-40 h-40 border-4 border-DGXgreen rounded-full overflow-hidden">
+        <img
+          src={backgroundImage || 'https://via.placeholder.com/150'} // Default image if no image selected
+          className="w-full h-full object-cover"
+          alt="Profile"
+        />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="absolute inset-0 opacity-0 cursor-pointer"
+          title="Click to change background image"
+        />
+      </div>
+
+      {/* Edit Profile Button */}
+      <div className="mt-2">
+        <div onClick={openModal}>
+          <FaEdit className="text-DGXblack text-3xl cursor-pointer" />
+        </div>
+      </div>
+
+      {/* Edit Profile Modal */}
+      <EditProfileModal
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+        userProfile={userProfile}
+      />
+
+      {/* Profile Details */}
+      <div className="flex flex-col items-center mt-4">
+        <div className="flex items-center space-x-2">
+          <p className="text-2xl">{user.Name}</p>
+          <span
+            className="bg-[#2563eb] rounded-full p-1"
+            title="Verified"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="text-DGXwhite h-2.5 w-2.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={4}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </span>
+        </div>
+        <p className="text-DGXgray">{user.Designation}</p>
+        <p className="text-sm text-[#6b7280]">{user.EmailId}</p>
+      </div>
+    </div>
                     </div>
                     <div className="my-4 flex flex-col 2xl:flex-row 2xl:space-y-0 2xl:space-x-4">
                         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">

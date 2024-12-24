@@ -179,3 +179,151 @@ export const getEvent = async (req, res) => {
     });
   }
 };
+
+export const updateEvent = async (req, res) => {
+  let success = false;
+
+  // Extract user ID from the authenticated request (assuming it's added by authentication middleware)
+  const userId = req.user.id;
+
+  // Validate request data
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const warningMessage = "Data is not in the right format";
+    logWarning(warningMessage); // Log the warning
+    res
+      .status(400)
+      .json({ success, data: errors.array(), message: warningMessage });
+    return;
+  }
+
+  try {
+    // Destructure form data
+    let {
+      title,
+      start,
+      end,
+      category,
+      companyCategory,
+      venue,
+      host,
+      registerLink,
+      poster,
+      description,
+    } = req.body;
+
+    // Set defaults if necessary
+    title = title ?? null;
+    start = start ?? null;
+    end = end ?? null;
+    category = category ?? null;
+    companyCategory = companyCategory ?? null;
+    venue = venue ?? null;
+    host = host ?? null;
+    registerLink = registerLink ?? null;
+    description = description ?? null;
+
+    // Extract event ID from request parameters (assumes eventId is passed as a parameter)
+    const eventId = req.params.eventId;
+
+    // Connect to the database
+    connectToDatabase(async (err, conn) => {
+      if (err) {
+        const errorMessage = "Failed to connect to database";
+        logError(err); // Log the error
+        res
+          .status(500)
+          .json({ success: false, data: err, message: errorMessage });
+        return;
+      }
+
+      try {
+        // Check if the event exists and belongs to the authenticated user
+        const checkEventQuery = `
+          SELECT EventID, AuthAdd 
+          FROM Community_Event 
+          WHERE EventID = ? AND isnull(delStatus, 0) = 0;
+        `;
+        const eventRows = await queryAsync(conn, checkEventQuery, [eventId]);
+
+        if (eventRows.length === 0) {
+          const warningMessage = "Event not found or does not belong to you";
+          logWarning(warningMessage);
+          res
+            .status(404)
+            .json({ success: false, data: {}, message: warningMessage });
+          return;
+        }
+
+        // Ensure the event belongs to the user attempting to update it
+        if (eventRows[0].AuthAdd !== userId) {
+          const warningMessage = "You are not authorized to update this event";
+          logWarning(warningMessage);
+          res
+            .status(403)
+            .json({ success: false, data: {}, message: warningMessage });
+          return;
+        }
+
+        // Update event details
+        const updateEventQuery = `
+          UPDATE Community_Event 
+          SET 
+            EventTitle = ?, 
+            StartDate = ?, 
+            EndDate = ?, 
+            EventType = ?, 
+            Category = ?, 
+            Venue = ?, 
+            Host = ?, 
+            RegistrationLink = ?, 
+            EventImage = ?, 
+            EventDescription = ? 
+          WHERE EventID = ?;
+        `;
+
+        await queryAsync(conn, updateEventQuery, [
+          title,
+          start,
+          end,
+          category,
+          companyCategory,
+          venue,
+          host,
+          registerLink,
+          poster, // Handle file upload separately if needed
+          description,
+          eventId,
+        ]);
+
+        success = true;
+        closeConnection();
+
+        const infoMessage = "Event updated successfully!";
+        logInfo(infoMessage);
+
+        // Send success response
+        res.status(200).json({
+          success,
+          data: { eventId },
+          message: infoMessage,
+        });
+      } catch (queryErr) {
+        closeConnection();
+        logError(queryErr);
+        res.status(500).json({
+          success: false,
+          data: queryErr,
+          message: "Something went wrong, please try again",
+        });
+      }
+    });
+  } catch (error) {
+    logError(error);
+    res.status(500).json({
+      success: false,
+      data: {},
+      message: "Something went wrong, please try again",
+    });
+  }
+};
