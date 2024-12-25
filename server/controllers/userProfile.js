@@ -196,7 +196,7 @@ export const getUserDiscussion = async (req, res) => {
 export const deleteUserDiscussion = async (req, res) => {
     let success = false;
     const userId = req.user.id;
-    const { discussionId } = req.params;  // Get discussionId from request parameters
+    const { discussionId } = req.body; // Get discussionId from request body
 
     // Validate the discussionId
     if (!discussionId) {
@@ -251,3 +251,4 @@ export const deleteUserDiscussion = async (req, res) => {
         res.status(500).json({ success: false, message: 'Something went wrong, please try again' });
     }
 };
+
