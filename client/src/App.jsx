@@ -31,8 +31,9 @@ import AdminDashboard from './Admin/AdminDashboard.jsx';
 import HomeAfterLoginComponent from './component/HomeAfterLoginComponent.jsx';
 // import PostCode from './component/PostCode.jsx';
 import CreateICSFile from './component/CreateICSFile.jsx';
-import SentimentAnalysis from './component/SentimentAnalysis.jsx';
-import BlogManager from './Admin/Components/BlogManager.jsx';
+
+// import BlogManager from './Admin/Components/BlogManager.jsx';
+
 
 
 
@@ -67,7 +68,7 @@ function App() {
             <Route path='/HomeAfterLoginComponent' element={<HomeAfterLoginComponent />} />
             {/* <Route path='/PostCode' element={<PostCode />} /> */}
             <Route path='/CreateICSFile' element={<CreateICSFile />} />
-            <Route path='/SentimentAnalysis' element={<SentimentAnalysis />} />
+         
 
 
 

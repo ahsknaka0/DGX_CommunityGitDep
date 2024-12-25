@@ -18,6 +18,8 @@ const Discussion = () => {
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Loading state
 
+
+
   useEffect(() => {
     // Simulating data fetching
     const loadEvents = async () => {
@@ -30,7 +32,7 @@ const Discussion = () => {
     loadEvents();
   }, []);
 
-  
+
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -238,7 +240,18 @@ const Discussion = () => {
     setModalIsOpen(false);
     setIsFormOpen(false);
   };
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+    useEffect(() => {
+        if (userToken && user) {
+            setIsLoggedIn(true);
+            console.log(user);
+
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, [user, userToken]);
+  
+  
 
   const handleTagInputChange = (e) => setTagInput(e.target.value);
 
@@ -458,6 +471,7 @@ const Discussion = () => {
                   Start a New Topic +
                 </button>
               </a>
+
             )
           )}
 

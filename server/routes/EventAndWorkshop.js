@@ -5,7 +5,8 @@ import { addEvent, getEvent } from "../controllers/eventandworkshop.js"; // Impo
 
 const router = express.Router();
 
-router.post('/addEvent', fetchUser, addEvent); 
-router.get('/getEvent', getEvent); 
+// Route for adding a new event
+router.post('/addEvent', fetchUser, addEvent); // The fetchUser middleware can be used if you need to authenticate the user.
+router.get('/getEvent', getEvent); // The fetchUser middleware can be used if you need to authenticate the user.
 
 export default router; 

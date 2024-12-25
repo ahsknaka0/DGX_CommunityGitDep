@@ -14,6 +14,7 @@ import Cookies from 'js-cookie';
 import ApiContext from '../context/ApiContext.jsx';
 import { ToastContainer, toast, } from "react-toastify";
 import DiscussionModal from './DiscussionModal.jsx';
+import EditProfileModal from './EditProfileModal'; 
 
 const UserProfile = () => {
   const [showEmailInput, setShowEmailInput] = useState(false);
