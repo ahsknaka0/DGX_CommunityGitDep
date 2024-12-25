@@ -192,3 +192,62 @@ export const getUserDiscussion = async (req, res) => {
         res.status(500).json({ success: false, data: {}, message: 'Something went wrong please try again' });
     }
 };
+
+export const deleteUserDiscussion = async (req, res) => {
+    let success = false;
+    const userId = req.user.id;
+    const { discussionId } = req.params;  // Get discussionId from request parameters
+
+    // Validate the discussionId
+    if (!discussionId) {
+        const warningMessage = "Discussion ID is required";
+        logWarning(warningMessage);
+        return res.status(400).json({ success, message: warningMessage });
+    }
+
+    try {
+        // Connect to the database
+        connectToDatabase(async (err, conn) => {
+            if (err) {
+                const errorMessage = "Failed to connect to database";
+                logError(err);
+                return res.status(500).json({ success: false, message: errorMessage });
+            }
+
+            try {
+                // Check if the discussion exists and if the user is the owner
+                const checkQuery = `SELECT UserID FROM Community_Discussion WHERE DiscussionID = ? AND ISNULL(delStatus, 0) = 0`;
+                const discussion = await queryAsync(conn, checkQuery, [discussionId]);
+
+                if (discussion.length === 0) {
+                    const errorMessage = "Discussion not found or already deleted";
+                    logWarning(errorMessage);
+                    return res.status(404).json({ success, message: errorMessage });
+                }
+
+                if (discussion[0].UserID !== userId) {
+                    const errorMessage = "You are not authorized to delete this discussion";
+                    logWarning(errorMessage);
+                    return res.status(403).json({ success, message: errorMessage });
+                }
+
+                // Proceed to delete the discussion by setting delStatus to 1 (soft delete)
+                const deleteQuery = `UPDATE Community_Discussion SET delStatus = 1 WHERE DiscussionID = ?`;
+                await queryAsync(conn, deleteQuery, [discussionId]);
+
+                success = true;
+                const infoMessage = "Discussion deleted successfully";
+                logInfo(infoMessage);
+                res.status(200).json({ success, message: infoMessage });
+            } catch (queryErr) {
+                logError(queryErr);
+                res.status(500).json({ success: false, message: 'Something went wrong, please try again' });
+            } finally {
+                closeConnection();  // Always close the database connection
+            }
+        });
+    } catch (error) {
+        logError(error);
+        res.status(500).json({ success: false, message: 'Something went wrong, please try again' });
+    }
+};

@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import ApiContext from '../context/ApiContext.jsx';
 import { ToastContainer, toast, } from "react-toastify";
+import DiscussionModal from './DiscussionModal.jsx';
 
 const UserProfile = () => {
   const [showEmailInput, setShowEmailInput] = useState(false);
@@ -125,6 +126,17 @@ const UserProfile = () => {
     navigate('/')
   }
 
+  const closeModal = () => {
+    setModalIsOpen(false);
+    // setIsFormOpen(false);
+  };
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedDiscussion, setSelectedDiscussion] = useState([]);
+  const handleClickDiscussion = (discussion) =>{
+    setSelectedDiscussion(discussion);
+    setModalIsOpen(true)
+  }
+
   useEffect(() => {
     const fetchUserDisscussions = () => {
       try {
@@ -164,9 +176,19 @@ const UserProfile = () => {
     }
   }, [user, userToken, fetchData]);
   return (
+    
     !isLoggedIn ? <h1>login?</h1> : loading ? <h1>loading....</h1> :
       <div className="bg-DGXwhite p-2 md:p-8">
         <ToastContainer />
+        {modalIsOpen && selectedDiscussion && (
+        <DiscussionModal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          discussion={selectedDiscussion}
+          // setDiscussions={setDiscussions}
+          // discussions={discussions}
+        />
+      )}
         <div className="md:my-4 flex flex-col 2xl:flex-row space-y-4 2xl:space-y-0 2xl:space-x-4">
           <div className="w-full flex flex-col 2xl:w-1/3">
             <div className="bg-DGXwhite w-full rounded-lg shadow-xl  pb-6 border border-DGXgreen">
@@ -175,7 +197,7 @@ const UserProfile = () => {
               </div>
               <div className="flex flex-col items-center -mt-20">
                 <div className="w-40 border-4 border-DGXgreen  rounded-full">
-                  <img src={backgroundImage} className='rounded-full' alt="Profile" />
+                  <img src={user.imagesx} className='rounded-full' alt="Profile" />
                   <input
                     type="file"
                     accept="image/*"
@@ -293,14 +315,15 @@ const UserProfile = () => {
             {activeTab === 'profile' && (
               <div className="flex flex-col w-full 2xl:w-3/3 ">
                 <div className="flex bg-DGXwhite rounded-lg shadow-xl p-2 md:p-4 border border-DGXgreen ">
-                  <div className="flex-1">
+                  {/* <div className="flex-1">
                     <h4 className="text-xl text-[#111827] font-bold">About</h4>
                     <p className="mt-2 text-DGXgray">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt voluptates obcaecati numquam error et ut fugiat asperiores. Sunt nulla ad incidunt laboriosam, laudantium est unde natus cum numquam, neque facere. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, magni odio magnam commodi sunt ipsum eum! Voluptas eveniet aperiam at maxime, iste id dicta autem odio laudantium eligendi commodi distinctio!</p>
-                  </div>
+                  </div> */}
                   <div className="flex items-end mt-4">
                     {/* User badges go here */}
-                    <span className="badge">Badge 1</span>
-                    <span className="badge">Badge 2</span>
+                    <h1>Comming Soon.......</h1>
+                    <span className="badge">Achievements</span>
+                    {/* <span className="badge">Badge 2</span> */}
                     {/* Add more badges as needed */}
                   </div>
                 </div>
@@ -399,7 +422,7 @@ const UserProfile = () => {
                               <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{discussion.Title}</h5>
                               <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{discussion.Content}</p>
                               <div className="ms-0">
-                                <span className="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                                <span className="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline" onClick={(e)=>{handleClickDiscussion(discussion)}}>
                                   Read more
                                   <svg className="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
