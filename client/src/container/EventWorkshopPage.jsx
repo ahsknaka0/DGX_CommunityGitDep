@@ -4,6 +4,7 @@ import GeneralUserCalendar from "../component/GeneralUserCalendar.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faShare } from "@fortawesome/free-solid-svg-icons";
 import ApiContext from "../context/ApiContext.jsx";
+import HeroSection from "../component/HeroSection.jsx";
 
 const EventDetailsModal = ({ event, isOpen, onClose }) => {
   if (!isOpen || !event) return null;
@@ -160,8 +161,9 @@ const EventWorkshopPage = () => {
         <p className="mx-auto max-w-2xl text-4xl font-bold tracking-tight text-[#111827] mb-10">
           Explore Events and Workshops
         </p>
-
-        <div className="mt-6 flex justify-center gap-6">
+        <HeroSection />
+  
+        {/* <div className="mt-6 flex justify-center gap-6">
           <button
             onClick={() => handleTabChange("myCompany")}
             className={`px-8 py-3 ${activeTab === "myCompany"
@@ -189,7 +191,7 @@ const EventWorkshopPage = () => {
           >
             GI India Old Events
           </button>
-        </div>
+        </div> */}
 
         <div
           className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 transition-opacity duration-300 ease-in-out ${isAnimating ? "opacity-0" : "opacity-100"
