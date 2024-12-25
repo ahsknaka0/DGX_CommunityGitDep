@@ -14,9 +14,17 @@ import Cookies from 'js-cookie';
 import ApiContext from '../context/ApiContext.jsx';
 import { ToastContainer, toast, } from "react-toastify";
 import DiscussionModal from './DiscussionModal.jsx';
-import EditProfileModal from './EditProfileModal'; 
+import EditProfileModal from './EditProfileModal';
 
 const UserProfile = () => {
+
+
+
+  // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  // const openEditForm = () => setIsEditModalOpen(true);
+  // const closeEditForm = () => setIsEditModalOpen(false);
+
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
   const [loading, setLoading] = useState(false)
@@ -133,7 +141,7 @@ const UserProfile = () => {
   };
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedDiscussion, setSelectedDiscussion] = useState([]);
-  const handleClickDiscussion = (discussion) =>{
+  const handleClickDiscussion = (discussion) => {
     setSelectedDiscussion(discussion);
     setModalIsOpen(true)
   }
@@ -177,27 +185,27 @@ const UserProfile = () => {
     }
   }, [user, userToken, fetchData]);
   return (
-    
+
     !isLoggedIn ? <h1>login?</h1> : loading ? <h1>loading....</h1> :
       <div className="bg-DGXwhite p-2 md:p-8">
         <ToastContainer />
         {modalIsOpen && selectedDiscussion && (
-        <DiscussionModal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          discussion={selectedDiscussion}
+          <DiscussionModal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            discussion={selectedDiscussion}
           // setDiscussions={setDiscussions}
           // discussions={discussions}
-        />
-      )}
+          />
+        )}
         <div className="md:my-4 flex flex-col 2xl:flex-row space-y-4 2xl:space-y-0 2xl:space-x-4">
           <div className="w-full flex flex-col 2xl:w-1/3">
             <div className="bg-DGXwhite w-full rounded-lg shadow-xl  pb-6 border border-DGXgreen">
               <div className="w-full h-[250px] rounded-t-lg border border-t-0 border-l-0 border-r-0 border-b-DGXgreen border-b-4">
                 <img src={images.NvidiaBackground} className="w-full h-full rounded-tl-lg rounded-tr-lg" alt="Profile background" />
               </div>
-              <div className="flex flex-col items-center -mt-20">
-                <div className="w-40 border-4 border-DGXgreen  rounded-full">
+              <div className="flex flex-col items-center -mt-15">
+                <div className="w-40 h-20 border-4 border-DGXgreen  rounded-full">
                   <img src={user.imagesx} className='rounded-full' alt="Profile" />
                   <input
                     type="file"
@@ -221,6 +229,25 @@ const UserProfile = () => {
                 <p className="text-DGXgray">{user.Designation}</p>
                 <p className="text-sm text-[#6b7280]">{user.EmailId}</p>
               </div>
+              {/* <button
+                onClick={openEditForm}
+                className="mt-2 bg-DGXblue text-white px-2 py-2 rounded-lg"
+              >
+                Edit Profile
+              </button> */}
+
+
+              {/* <EditProfileModal
+                isOpen={isEditModalOpen}
+                closeModal={closeEditForm}
+                userProfile={{
+                  name: user.Name,
+                  email: user.EmailId,
+                  address: user.Address || '',
+                  phoneNumber: user.PhoneNumber || '',
+                  aboutMe: user.AboutMe || '',
+                }}
+              /> */}
             </div>
             <div className="my-4 flex flex-col 2xl:flex-row 2xl:space-y-0 2xl:space-x-4">
               <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
@@ -413,7 +440,7 @@ const UserProfile = () => {
                   {
                     userDisscussions.map((discussion, index) => (
                       <>
-                        
+
                         <div className='post shadow-xl rounded-md p-2'>
                           <a href="#" className="m-2 shadow-xl flex flex-col md:flex-row bg-white border border-DGXgreen rounded-lg hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                             <div className="w-full md:w-1/4">
@@ -423,7 +450,7 @@ const UserProfile = () => {
                               <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{discussion.Title}</h5>
                               <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{discussion.Content}</p>
                               <div className="ms-0">
-                                <span className="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline" onClick={(e)=>{handleClickDiscussion(discussion)}}>
+                                <span className="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline" onClick={(e) => { handleClickDiscussion(discussion) }}>
                                   Read more
                                   <svg className="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -456,36 +483,7 @@ const UserProfile = () => {
                   <h4 className="text-xl text-[#0f172a] font-bold">My Events</h4>
                 </div>
                 Coming Soon
-                {/* <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-                                <a href="#" className="border-DGXgreen shadow-xl flex flex-col items-center bg-white border rounded-lg  md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 m-2">
-                                    <img className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src="/docs/images/blog/image-4.jpg" alt="" />
-                                    <div className="flex flex-col justify-between p-4 leading-normal">
-                                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
-                                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                                    </div>
-                                </a>
-                                <a href="#" className="border-DGXgreen shadow-xl flex flex-col items-center bg-white border rounded-lg  md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 m-2">
-                                    <img className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src="/docs/images/blog/image-4.jpg" alt="" />
-                                    <div className="flex flex-col justify-between p-4 leading-normal">
-                                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
-                                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                                    </div>
-                                </a>
-                                <a href="#" className="border-DGXgreen shadow-xl flex flex-col items-center bg-white border rounded-lg  md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 m-2">
-                                    <img className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src="/docs/images/blog/image-4.jpg" alt="" />
-                                    <div className="flex flex-col justify-between p-4 leading-normal">
-                                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
-                                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                                    </div>
-                                </a>
-                                <a href="#" className="border-DGXgreen shadow-xl flex flex-col items-center bg-white border rounded-lg  md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 m-2">
-                                    <img className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src="/docs/images/blog/image-4.jpg" alt="" />
-                                    <div className="flex flex-col justify-between p-4 leading-normal">
-                                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
-                                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                                    </div>
-                                </a>
-                            </div> */}
+
               </div>
             )}
             {activeTab === 'password' && (

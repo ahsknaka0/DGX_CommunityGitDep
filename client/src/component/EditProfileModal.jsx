@@ -30,37 +30,6 @@ const EditProfileModal = ({ isOpen, closeModal, userProfile }) => {
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div className="bg-white p-6 rounded-lg max-w-lg w-full">
           <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
-
-          <div className="mb-4">
-            <label className="block text-gray-700">Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="mt-1 p-2 w-full border rounded-md"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 p-2 w-full border rounded-md"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700">Address</label>
-            <input
-              type="text"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="mt-1 p-2 w-full border rounded-md"
-            />
-          </div>
-
           <div className="mb-4">
             <label className="block text-gray-700">Phone Number</label>
             <input
